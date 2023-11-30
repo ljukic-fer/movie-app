@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -6,6 +7,8 @@ const MovieList = () => {
     const [genres, setGenres] = useState([]);
     const [filteredMovies, setFilteredMovies] = useState([]);
     const [filter, setFilter] = useState('');
+    const [sortOption, setSortOption] = useState('original_title');
+    const [SortDirection, setSortDirection] = useState('asc');
 
 
     useEffect(() => {
@@ -32,9 +35,54 @@ const MovieList = () => {
         );
     }, [movies, filter]);
 
+    useEffect(() => {
+        const sortedMovies = [...movies].sort((a, b) => {
+            const aValue = a[sortOption];
+            const bValue = b[sortOption];
+
+            if (SortDirection === 'asc') {
+                return aValue.localeCompare(bValue);
+            } else {
+                return bValue.localeCompare(aValue);
+            }
+        })
+
+        setFilteredMovies(
+            sortedMovies.filter((movie) => movie.original_title.toLowerCase().includes(filter.toLowerCase()))
+        )
+    }, [movies,filter, sortOption, SortDirection]);
+
+
+    const handleSortChange = (e) => {
+        const selectedSortOption = e.target.value;
+        setSortOption(selectedSortOption);
+    }
+
+    const handleSortDirection = (e) => {
+        const selectedSortDirection = e.target.value;
+        setSortDirection(selectedSortDirection);
+    }
+
+
     return (
         <div>
             <h2>Most Popular Movies</h2>
+            <div>
+                <label>
+                    Sort by: {' '}
+                    <select value={sortOption} onChange={handleSortChange}>
+                        <option value='original_title'>Title</option>
+                        <option value='release_date'>Release date</option>
+                    </select>
+                </label>
+                <label>
+                    Sort direction: {' '}
+                    <select value={SortDirection} onChange={handleSortDirection}>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </label>
+            </div>
             <input
                 type="text"
                 placeholder="Filter by movie name"
