@@ -12,14 +12,35 @@ const MovieList = () => {
 
 
     useEffect(() => {
+        const fetchCredits = async (movieId) => {
+            try {
+                const creditsResponse = await axios.get(`http://localhost:5000/api/movie/${movieId}/credits`);
+                return creditsResponse.data;
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
         const fetchMovies = async () => {
             try {
                 const [moviesResponse, genresResponse] = await Promise.all([
                     axios.get('http://localhost:5000/api/popular-movies'),
                     axios.get('http://localhost:5000/api/genres'),
                 ]);
-                setMovies(moviesResponse.data);
-                setFilteredMovies(moviesResponse.data);
+
+                const moviesWithCredits = await Promise.all(
+                    moviesResponse.data.map(async (movie) => {
+                        const credits = await fetchCredits(movie.id);
+                        return { ...movie, credits };
+                    })
+                );
+
+                const credits = await fetchCredits(507089);
+                console.log(credits);
+
+                setMovies(moviesWithCredits);
+                setFilteredMovies(moviesWithCredits);
                 setGenres(genresResponse.data);
             } catch (error) {
                 console.error(error);
@@ -50,7 +71,8 @@ const MovieList = () => {
         setFilteredMovies(
             sortedMovies.filter((movie) => movie.original_title.toLowerCase().includes(filter.toLowerCase()))
         )
-    }, [movies,filter, sortOption, SortDirection]);
+    }, [movies, filter, sortOption, SortDirection]);
+
 
 
     const handleSortChange = (e) => {
@@ -99,6 +121,8 @@ const MovieList = () => {
                             .join(', ')}
                         <br />
                         <strong>Release Date:</strong> {movie.release_date}
+                        <br />
+                        <strong>Movie ID:</strong> {movie.id}
                         <br />
                         {movie.credits && (
                             <div>

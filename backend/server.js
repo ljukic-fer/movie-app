@@ -29,18 +29,35 @@ app.get('/api/popular-movies', async (req, res) => {
 
 // genres endpoint
 app.get('/api/genres', async (req, res) => {
-    try {
-      const response = await axios.get('https://api.themoviedb.org/3/genre/movie/list', {
-        params: {
-          api_key: '12ac22d9022ae7a3f3fa5e61b3c39cf7',
-        },
-      });
-      res.json(response.data.genres);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+  try {
+    const response = await axios.get('https://api.themoviedb.org/3/genre/movie/list', {
+      params: {
+        api_key: '12ac22d9022ae7a3f3fa5e61b3c39cf7',
+      },
+    });
+    res.json(response.data.genres);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//credits endpoitn
+app.get('/api/movie/:id/credits', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios.get(`http://api.themoviedb.org/3/movie/${id}/credits`, {
+      params: {
+        api_key: '12ac22d9022ae7a3f3fa5e61b3c39cf7',
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
