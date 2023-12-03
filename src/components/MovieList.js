@@ -124,6 +124,8 @@ const MovieList = () => {
                         <br />
                         <strong>Movie ID:</strong> {movie.id}
                         <br />
+                        <strong>Popularity:</strong> {movie.popularity}
+                        <br />
                         {movie.credits && (
                             <div>
                                 <strong>Actors:</strong> {movie.credits.cast.slice(0, 3).map((actor) => actor.name).join(', ')}
