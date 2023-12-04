@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url('../homepagePhoto.jpg');
+  background-image: url('../cine1.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -9,7 +9,7 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   color: white;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
   height: 100%;
   margin-left: 50px;
 }

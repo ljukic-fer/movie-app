@@ -8,8 +8,8 @@ const MovieList = () => {
     const [genres, setGenres] = useState([]);
     const [filteredMovies, setFilteredMovies] = useState([]);
     const [filter, setFilter] = useState('');
-    const [sortOption, setSortOption] = useState('original_title');
-    const [SortDirection, setSortDirection] = useState('asc');
+    const [sortOption, setSortOption] = useState('popularity');
+    const [SortDirection, setSortDirection] = useState('desc');
 
 
     useEffect(() => {
@@ -62,10 +62,10 @@ const MovieList = () => {
             const aValue = a[sortOption];
             const bValue = b[sortOption];
 
-            if (SortDirection === 'asc') {
-                return aValue.localeCompare(bValue);
+            if (typeof aValue === 'string' && typeof bValue === 'string') {
+                return SortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
             } else {
-                return bValue.localeCompare(aValue);
+                return SortDirection === 'asc' ? aValue - bValue : bValue - aValue;
             }
         })
 
@@ -94,6 +94,7 @@ const MovieList = () => {
                 <label>
                     Sort by: {' '}
                     <select value={sortOption} onChange={handleSortChange}>
+                        <option value='popularity'>Popularity</option>
                         <option value='original_title'>Title</option>
                         <option value='release_date'>Release date</option>
                     </select>
@@ -123,9 +124,7 @@ const MovieList = () => {
                         <br />
                         <strong>Release Date:</strong> {movie.release_date}
                         <br />
-                        <strong>Movie ID:</strong> {movie.id}
-                        <br />
-                        <strong>Popularity:</strong> {movie.popularity}
+                        <strong>Popularity:</strong> {movie.popularity.toFixed(1)}
                         <br />
                         {movie.credits && (
                             <div>
