@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { animateScroll } from 'react-scroll';
 import axios from 'axios';
 import './HomePage.css';
 
@@ -71,9 +72,12 @@ const MovieList = () => {
 
         setFilteredMovies(
             sortedMovies.filter((movie) => movie.original_title.toLowerCase().includes(filter.toLowerCase()))
-        )
-    }, [movies, filter, sortOption, SortDirection]);
+        );
 
+        setTimeout(() => {
+            document.querySelector('ul').style.transform = 'scale(1)';
+        }, 10);
+    }, [movies, filter, sortOption, SortDirection]);
 
 
     const handleSortChange = (e) => {
@@ -81,9 +85,14 @@ const MovieList = () => {
         setSortOption(selectedSortOption);
     }
 
-    const handleSortDirection = (e) => {
-        const selectedSortDirection = e.target.value;
-        setSortDirection(selectedSortDirection);
+
+    const handleSortButtonClick = () => {
+        const newSortDirection = SortDirection === 'asc' ? 'desc' : 'asc';
+        setSortDirection(newSortDirection);
+    }
+
+    const handleScrollToTop = () => {
+        animateScroll.scrollToTop({ smooth: true, duration: 500 })
     }
 
 
@@ -100,12 +109,12 @@ const MovieList = () => {
                     </select>
                 </label>
                 <label>
-                    Sort direction: {' '}
-                    <select value={SortDirection} onChange={handleSortDirection}>
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
-                    </select>
+                    &nbsp;&nbsp;&nbsp;
                 </label>
+                <button onClick={handleSortButtonClick} className='button' style={{ fontSize: '14px', padding: '8px 12px' }}>
+                    Toggle sort direction
+                </button>
+                <strong>&nbsp;&nbsp;{SortDirection}</strong>
             </div>
             <input
                 type="text"
@@ -137,6 +146,10 @@ const MovieList = () => {
                     </li>
                 ))}
             </ul>
+            <button className='scroll-to-top-button' onClick={handleScrollToTop}>
+                &uarr;
+            </button>
+
         </div>
     );
 };

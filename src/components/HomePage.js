@@ -8,7 +8,7 @@ const HomePage = () => {
             <h1>Welcome to the Movie App</h1>
             <p>Most popular movies of the day</p>
             <Link to='/movies'>
-                <button>Show movies</button>
+                <button className="button">Show movies</button>
             </Link>
         </div>
     )
