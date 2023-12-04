@@ -38,9 +38,6 @@ const MovieList = () => {
                     })
                 );
 
-                const credits = await fetchCredits(507089);
-                console.log(credits);
-
                 setMovies(moviesWithCredits);
                 setFilteredMovies(moviesWithCredits);
                 setGenres(genresResponse.data);
@@ -124,7 +121,15 @@ const MovieList = () => {
             />
             <ul>
                 {filteredMovies.map((movie) => (
-                    <li key={movie.id}>
+                    <li key={movie.id} className='movie-item'>
+                        <div className='movie-image'>
+                        <img
+                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            alt={movie.title}
+                            height={130}
+                        />
+                        </div>
+                        <div className='movie-info'>
                         <strong>Title:</strong> {movie.original_title}
                         <br />
                         <strong>Genre:</strong> {movie.genre_ids
@@ -143,6 +148,7 @@ const MovieList = () => {
                             </div>
                         )}
                         <hr />
+                        </div>
                     </li>
                 ))}
             </ul>
